@@ -1,7 +1,8 @@
 # prod
 dist/
-
 # dev
+.dev.vars
+passwords.txt
 .yarn/
 !.yarn/releases
 .vscode/*
