@@ -1,17 +1,21 @@
 import { Hono } from "hono";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
-const prisma = new PrismaClient().$extends(withAccelerate());
+const app = new Hono<{
+  Bindings: {
+    DATABASE_URL: string;
+  };
+}>();
 
-const app = new Hono();
+app.get("/hello", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
 
-app.get("/", (c) => c.text("Hello Hono!"));
+  const data = await prisma.user.findMany();
 
-app.post("/api/v1/signup", (c) => c.text("Signup route"));
-app.post("/api/v1/login", (c) => c.text("Login route"));
-app.post("/api/v1/blog", (c) => c.text("Create blog"));
-app.put("/api/v1/blog", (c) => c.text("Update blog"));
-app.get("/api/v1/blog/:id", (c) => c.text("Get blog by id"));
+  return c.json(data);
+});
 
 export default app;
