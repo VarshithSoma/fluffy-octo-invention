@@ -60,7 +60,7 @@ userRouter.post("/signin", async (c) => {
     const token = await sign(
       {
         userId: user.id,
-        exp: Math.floor(Date.now() / 1000) + 60 * 5,
+        exp: Math.floor(Date.now() / 1000) + 60 * 15,
       },
       c.env.JWT_SECRET
     );
