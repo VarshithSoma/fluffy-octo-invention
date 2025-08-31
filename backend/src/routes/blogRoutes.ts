@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
+import { createPostInput, updatePostInput } from "@varshithsoma/common-app";
+
 interface Env {
   Bindings: {
     DATABASE_URL: string;
@@ -31,39 +33,59 @@ blogRoutes.use("/*", async (c, next) => {
   }
 });
 blogRoutes.post("/", async (c) => {
-  const body = await c.req.json();
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
   try {
-    const data = await prisma.post.create({
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const body = await c.req.json();
+    const result = createPostInput.safeParse({
+      title: body.title,
+      content: body.content,
+      authorId: c.get("userId"),
+    });
+    if (!result.success) {
+      return c.text("some error occured");
+    }
+    const insert = await prisma.post.create({
       data: {
         title: body.title,
         content: body.content,
         authorId: c.get("userId"),
       },
     });
-    return c.json(data);
+    return c.json(insert);
   } catch (error) {
     return c.text("some error occured");
   }
 });
 
 blogRoutes.put("/", async (c) => {
-  const body = await c.req.json();
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-  const data = await prisma.post.update({
-    where: {
-      id: body.id,
-    },
-    data: {
+  try {
+    const body = await c.req.json();
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const result = updatePostInput.safeParse({
       title: body.title,
       content: body.content,
-    },
-  });
-  return c.json(data);
+    });
+    if (!result.success) {
+      return c.text("some error occured");
+    }
+    const data = await prisma.post.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        title: body.title,
+        content: body.content,
+      },
+    });
+    return c.json(data);
+  } catch (error) {
+    c.status(404);
+    return c.text("something went wrong");
+  }
 });
 blogRoutes.get("/bulk", async (c) => {
   const prisma = new PrismaClient({
