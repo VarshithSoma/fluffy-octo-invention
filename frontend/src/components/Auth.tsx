@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, type ChangeEvent } from "react";
-import { type SignupType } from "@varshithsoma/common-app";
+import type { SignupType } from "@varshithsoma/common-app";
 export const Auth = ({ type }: { type: "signin" | "signup" }) => {
   const [postInputs, setPostInputs] = useState<SignupType>({
     name: "",
@@ -11,24 +11,30 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
     <div className="h-screen flex justify-center items-center flex-col">
       <div className="text-4xl font-extrabold mb-2">Create an account</div>
       <div className="mb-10 text-gray-400">
-        Already have an Account?{" "}
-        <Link to="/signin" className="underline ">
-          Login
+        {type === "signup"
+          ? "Already have an Account? "
+          : "Don't have an Account? "}
+        <Link
+          to={type === "signin" ? "/signup" : "/signin"}
+          className="underline "
+        >
+          {type === "signin" ? "Login" : "Signup"}
         </Link>
       </div>
-
       <div className="w-full max-w-md">
-        <LabelInput
-          label="Username"
-          placeholder="Enter Your Username"
-          onChange={(e) => {
-            setPostInputs({
-              ...postInputs,
-              name: e.target.value,
-            });
-          }}
-          type="text"
-        />
+        {type === "signup" ? (
+          <LabelInput
+            label="Username"
+            placeholder="Enter Your Username"
+            onChange={(e) => {
+              setPostInputs({
+                ...postInputs,
+                name: e.target.value,
+              });
+            }}
+            type="text"
+          />
+        ) : null}
         <LabelInput
           label="Email"
           placeholder="Enter Your Email"
@@ -51,11 +57,13 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
           }}
           type="password"
         />
+        <button
+          type="button"
+          className="mt-7  w-full text-gray-900  font-medium rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 "
+        >
+          {type == "signin" ? "Signin" : "Signup"}
+        </button>
       </div>
-      <button
-        type="button"
-        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-      ></button>
     </div>
   );
 };
