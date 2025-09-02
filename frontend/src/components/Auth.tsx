@@ -1,12 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, type ChangeEvent } from "react";
 import type { SignupType } from "@varshithsoma/common-app";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 export const Auth = ({ type }: { type: "signin" | "signup" }) => {
   const [postInputs, setPostInputs] = useState<SignupType>({
     name: "",
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  async function sendRequest() {
+    try {
+      console.log("called");
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/user/${type}`,
+        postInputs
+      );
+      const jwt = response.data;
+      localStorage.setItem("jwt", jwt);
+      navigate("/blogs");
+    } catch {
+      alert("failed");
+    }
+  }
   return (
     <div className="h-screen flex justify-center items-center flex-col">
       <div className="text-4xl font-extrabold mb-2">Create an account</div>
@@ -59,6 +76,7 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
         />
         <button
           type="button"
+          onClick={sendRequest}
           className="mt-7  w-full text-gray-900  font-medium rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 "
         >
           {type == "signin" ? "Signin" : "Signup"}
