@@ -14,10 +14,17 @@ export const useBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/blog/bulk`).then((response) => {
-      setBlogs(response.data);
-      setLoading(false);
-    });
+    axios
+      .get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      })
+      .then((response) => {
+        setBlogs(response.data);
+        setLoading(false);
+        console.log(response.data);
+      });
   }, []);
   return { loading, blogs };
 };

@@ -13,13 +13,13 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
   async function sendRequest() {
     try {
       console.log("called");
-      const response = await axios.post(
-        `${BACKEND_URL}/api/v1/user/${type}`,
-        postInputs
-      );
-      const jwt = response.data;
-      localStorage.setItem("jwt", jwt);
-      navigate("/blogs");
+      const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type}`, {
+        email: postInputs.email,
+        password: postInputs.password,
+      });
+      console.log(response);
+      localStorage.setItem("jwt", response.data);
+      navigate("/blogs/");
     } catch {
       alert("failed");
     }
@@ -79,7 +79,7 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
           onClick={sendRequest}
           className="mt-7  w-full text-gray-900  font-medium rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 "
         >
-          {type == "signin" ? "Signin" : "Signup"}
+          {type === "signin" ? "Signin" : "Signup"}
         </button>
       </div>
     </div>

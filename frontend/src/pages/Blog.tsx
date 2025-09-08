@@ -8,15 +8,15 @@ export const Blog = () => {
   if (loading) {
     return <div>...loading</div>;
   }
-
   return (
     <>
       <Appbar />
-      <div className="flex justify-center">
-        <div className="max-w-xl">
+      <div className="">
+        <div className="">
           {blogs.map((el) => (
             <BlogCard
               key={el.id}
+              id={el.id}
               authorName={el.author.name}
               title={el.title}
               content={el.content}
