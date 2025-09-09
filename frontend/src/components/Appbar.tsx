@@ -15,6 +15,7 @@ export function Appbar() {
             New Blog
           </button>
         </Link>
+
         <Avatar authorName="Varshith" size={10} />
       </div>
     </div>

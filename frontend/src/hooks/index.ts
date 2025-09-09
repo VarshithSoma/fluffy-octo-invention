@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 interface Blog {
   content: string;
   title: string;
@@ -14,6 +15,7 @@ interface Blog {
 export const useBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/api/v1/blog/bulk`, {
@@ -22,17 +24,25 @@ export const useBlogs = () => {
         },
       })
       .then((response) => {
-        response.data.reverse();
-        setBlogs(response.data);
+        setBlogs(response.data.reverse());
         setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response?.status === 403) {
+          navigate("/");
+        }
       });
-  }, []);
+  }, [navigate]);
+
   return { loading, blogs };
 };
 export const useBlog = () => {
   const [loading, setLoading] = useState(true);
-  const [blog, setBlogs] = useState<Blog>();
+  const [blog, setBlog] = useState<Blog>();
   const { id } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
@@ -41,9 +51,16 @@ export const useBlog = () => {
         },
       })
       .then((res) => {
-        setBlogs(res.data);
+        setBlog(res.data);
         setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response?.status === 403) {
+          navigate("/");
+        }
       });
-  }, [id]);
+  }, [id, navigate]);
+
   return { loading, blog };
 };

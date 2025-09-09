@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Appbar } from "../components/Appbar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const Publish = () => {
   return (

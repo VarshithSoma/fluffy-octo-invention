@@ -35,7 +35,7 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
           to={type === "signin" ? "/signup" : "/signin"}
           className="underline "
         >
-          {type === "signin" ? "Login" : "Signup"}
+          {type === "signin" ? "Signup" : "Signin"}
         </Link>
       </div>
       <div className="w-full max-w-md">
