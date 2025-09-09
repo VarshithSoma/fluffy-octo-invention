@@ -119,6 +119,15 @@ blogRoutes.get("/:id", async (c) => {
     where: {
       id: id,
     },
+    select: {
+      title: true,
+      content: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   return c.json(data);
 });

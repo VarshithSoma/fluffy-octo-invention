@@ -16,7 +16,7 @@ export const BlogCard = ({
 }: BlogCardProps) => {
   console.log(authorName, title, content);
   return (
-    <Link to={`/blogs/${id}`}>
+    <Link to={`/blog/${id}`}>
       <div className="mx-auto max-w-3xl border-b border-slate-200 p-8">
         <div className="flex items-center">
           <Avatar authorName={authorName} size={10} />
@@ -39,7 +39,6 @@ interface avatarProps {
   size: number;
 }
 export function Avatar(props: avatarProps) {
-  console.log(props);
   return (
     <div
       className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600`}

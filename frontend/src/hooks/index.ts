@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { useParams } from "react-router-dom";
 interface Blog {
   content: string;
   title: string;
@@ -21,10 +22,28 @@ export const useBlogs = () => {
         },
       })
       .then((response) => {
+        response.data.reverse();
         setBlogs(response.data);
         setLoading(false);
-        console.log(response.data);
       });
   }, []);
   return { loading, blogs };
+};
+export const useBlog = () => {
+  const [loading, setLoading] = useState(true);
+  const [blog, setBlogs] = useState<Blog>();
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      })
+      .then((res) => {
+        setBlogs(res.data);
+        setLoading(false);
+      });
+  }, [id]);
+  return { loading, blog };
 };
