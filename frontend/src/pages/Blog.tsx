@@ -1,11 +1,22 @@
 import { useBlog } from "../hooks";
 import { Avatar } from "../components/BlogCard";
 import { Appbar } from "../components/Appbar";
+import { BlogSkeleton } from "../components/BlogSkeleton";
 
 export const Blog = () => {
   const { loading, blog } = useBlog();
   if (loading) {
-    return <div>...Loading</div>;
+    return (
+      <>
+        <Appbar />
+        <div className="w-full mx-auto max-w-6xl">
+          <div className="flex flex-col justify-around gap-10 m-10">
+            <BlogSkeleton />
+            <BlogSkeleton />
+          </div>
+        </div>
+      </>
+    );
   }
   return (
     <>

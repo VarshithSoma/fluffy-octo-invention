@@ -20,8 +20,8 @@ export const Auth = ({ type }: { type: "signin" | "signup" }) => {
       console.log(response);
       localStorage.setItem("jwt", response.data);
       navigate("/blogs/");
-    } catch {
-      alert("failed");
+    } catch (error) {
+      alert(error);
     }
   }
   return (

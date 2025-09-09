@@ -4,7 +4,9 @@ export function Appbar() {
   return (
     <div className="flex justify-between px-10 py-5 border-b border-slate-200 align-center">
       <div className="flex h-max flex-col items-center justify-center">
-        <Link to="/blogs">Medium</Link>
+        <div className="mt-2">
+          <Link to="/blogs">Medium</Link>
+        </div>
       </div>
       <div>
         <Link to="/publish">
